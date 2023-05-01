@@ -6,12 +6,7 @@ from datasets import load_dataset
 from dataclasses import dataclass
 from transformers import PreTrainedTokenizer
 import torch
-
-
-SPECIAL_TOKENS = {
-    "prompter":"|prompter|",
-    "assistant":"|assistant|"
-}
+from utils import SPECIAL_TOKENS
 
 @dataclass
 class HFSummary(Dataset):
@@ -32,7 +27,7 @@ class HFSummary(Dataset):
                 postid = item["info"]["id"]
                 summary = {k:item["summary"][k] for k in ["text","axes"]}
                 if postid not in data_dict.keys():
-                    instruction = "summarize: " + item["info"]["post"] 
+                    instruction = "summarize: " + (item["info"]["post"]  or item["info"]["article"])
                     data_dict[postid].update({"post":instruction,"summaries":[summary]})
                 else:
                     data_dict[postid]["summaries"].append(summary)
@@ -49,7 +44,7 @@ class HFSummary(Dataset):
         return post, summaries
     
 @dataclass
-class DataCollator:
+class RMDataCollator:
     tokenizer:PreTrainedTokenizer
     max_length:int=512
 
@@ -77,24 +72,23 @@ class DataCollator:
             pad_len = self.max_length - len(out_tokens)
             attn_masks = [1] * len(out_tokens) + [0] * pad_len
             out_tokens += [self.tokenizer.pad_token_id] * pad_len
-            print(len(out_tokens))
             input_ids.append(out_tokens)
             attention_masks.append(attn_masks)
         return input_ids, attention_masks
     
     def __call__(self,examples):
         
-        batch_k_lens = []
+        batch_k_lens = [0]
         input_ids, attention_masks = [],[]
-        for example in examples:
+        for i,example in enumerate(examples):
             inp_ids,attn_masks = self.process_example(example)
             input_ids.extend(inp_ids)
             attention_masks.extend(attn_masks)
-            batch_k_lens.append(len(inp_ids))
+            batch_k_lens.append(batch_k_lens[i]+len(inp_ids))
 
         return {
             "input_ids":torch.tensor(input_ids),
-            "attention_masks":torch.tensor(attention_masks),
+            "attention_mask":torch.tensor(attention_masks),
             "k_lens":batch_k_lens
         }
             
