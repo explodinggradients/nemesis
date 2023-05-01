@@ -43,7 +43,6 @@ class GPTNeoXRM(GPTNeoXPreTrainedModel):
              hidden_states = hidden_states.mean(dim=1)
         else:
              hidden_states = (hidden_states * attention_mask.unsqueeze(-1)).sum(dim=1) / attention_mask.sum(dim=1).unsqueeze(-1)
-        print(hidden_states.shape)
         lm_logits = self.out_layer(hidden_states)
 
         if not return_dict:
