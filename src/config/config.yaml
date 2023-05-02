@@ -5,7 +5,7 @@ log_dir: "rm-model"
 log_wandb: true
 run_name: neox-160m
 wandb_entity: "shahules786"
-max_length: 256
+max_length: 512
 per_digit_tokens: False
 special_tokens:
   eos_token: "</s>"
