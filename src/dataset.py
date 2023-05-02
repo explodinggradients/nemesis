@@ -40,7 +40,9 @@ class HFSummary(Dataset):
     def __getitem__(self,idx):
         post,summaries = self.data_dict[self.postids[idx]].values()
         summaries = sorted(summaries,key=lambda x:x['axes']['overall'],reverse=True)
-        summaries = [item["text"].strip() for item in summaries]
+        dedup_dict = {item["axes"]["overall"]:item["text"] for item in summaries}
+        summaries = {key:val for val,key in dedup_dict.items()}
+        summaries = list(summaries.keys())
         return post, summaries
     
 @dataclass
