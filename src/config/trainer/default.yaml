@@ -9,8 +9,8 @@ adam_beta1: 0.9
 adam_beta2: 0.95
 adam_epsilon: 1e-12
 weight_decay: 0.001
-eval_steps: 10
-save_steps: 10
+eval_steps: 50
+save_steps: 50
 num_train_epochs: 1
 logging_steps: 10
 max_grad_norm: 1.0
