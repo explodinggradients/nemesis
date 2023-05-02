@@ -1,9 +1,9 @@
 defaults:
   - trainer: default
 model: "EleutherAI/pythia-160m"
-log_dir: "safetyfiles"
+log_dir: "rm-model"
 log_wandb: true
-run_name: neox-160m-3epochs
+run_name: neox-160m
 wandb_entity: "shahules786"
 max_length: 256
 per_digit_tokens: False
