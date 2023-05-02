@@ -66,9 +66,10 @@ class RMDataCollator:
         for output in outputs:
             out_tokens = self.tokenizer.encode(output,)
             if len(prefix_tokens) + len(out_tokens) > self.max_length:
-                trunc_len = len(prefix_tokens) + len(out_tokens) - self.max_length
+                trunc_len = max(0,len(prefix_tokens) + len(out_tokens) - self.max_length)
             prefix_tokens = prefix_tokens[trunc_len:]
             out_tokens = prefix_tokens + out_tokens
+            out_tokens = out_tokens[:self.max_length]
             pad_len = self.max_length - len(out_tokens)
             attn_masks = [1] * len(out_tokens) + [0] * pad_len
             out_tokens += [self.tokenizer.pad_token_id] * pad_len
