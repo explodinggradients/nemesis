@@ -1,16 +1,19 @@
 defaults:
   - trainer: default
 model: "EleutherAI/pythia-160m"
-log_dir: "rm-model"
+log_dir: "safetyfiles"
 log_wandb: true
-run_name: neox-160m
+run_name: neox-160m-3epochs
 wandb_entity: "shahules786"
-max_length: 256
+max_length: 512
 per_digit_tokens: False
 special_tokens:
   eos_token: "</s>"
   sep_token: "<sep>"
   pad_token: "<pad>"
-dataset:
-  train: "validation"
-  validation:  "test"
+datasets:
+  - hf_summary:
+        split: ["validation","test"]
+  - webgpt:
+        split: "train"
+validation_size: 0.15
