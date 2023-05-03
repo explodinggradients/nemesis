@@ -1,4 +1,5 @@
 from collections import defaultdict
+from re import split
 from sre_parse import SPECIAL_CHARS
 from typing import Any
 from torch.utils.data import DataLoader, Dataset
@@ -7,6 +8,7 @@ from dataclasses import dataclass
 from transformers import PreTrainedTokenizer
 import torch
 from utils import SPECIAL_TOKENS
+import re
 
 @dataclass
 class HFSummary(Dataset):
@@ -44,7 +46,42 @@ class HFSummary(Dataset):
         summaries = {key:val for val,key in dedup_dict.items()}
         summaries = list(summaries.keys())
         return post, summaries
+
+class WebGPT:
+    name = "openai/webgpt_comparisons"
+
+    def __init__(self, split:str="train"):
+        super().__init__()
+        dataset = load_dataset(self.name, split=split)
+        self.dataset_dict = defaultdict(dict)
+        for item in dataset:
+            post_id = item["question"]["id"]
+            if post_id not in self.dataset_dict.keys():
+                self.dataset_dict[post_id] = {"full_text": item["question"]["full_text"],
+                                              "answers":[]}
+                if item["score_0"] > 0:
+                    answers = [item["answer_0"],item["answer_1"]]
+                elif item["score_0"] < 0:
+                    answers = [item["answer_1"],item["answer_0"]]
+                else:
+                    answers = []
+                answers = [re.sub(r"\[\d+\]","",answer) for answer in answers]
+                answers = [".".join([sent.strip() for sent in answer.split('.')]) for answer in answers]
+                if answers:
+                    self.dataset_dict[post_id]["answers"].extend(answers)
+                else:
+                    _ = self.dataset_dict.pop(post_id)
+
+        self.post_ids = list(self.dataset_dict.keys())
+
+    def __len__(self):
+        return len(self.post_ids)
+
+    def __getitem__(self, idx):
+        question, answers = self.dataset_dict[self.post_ids[idx]].values()
+        return question, answers
     
+
 @dataclass
 class RMDataCollator:
     tokenizer:PreTrainedTokenizer
