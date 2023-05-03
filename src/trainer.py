@@ -5,12 +5,12 @@ from transformers import Trainer
 import hydra
 from hydra.utils import instantiate
 from omegaconf import DictConfig
-from dataset import HFSummary, RMDataCollator
+from datacollator import RMDataCollator
 import os
 
 from loss import RMLoss
 from model import GPTNeoXRM
-from utils import get_tokenizer
+from utils import get_tokenizer, prepare_datasets
 
 
 class RMTrainer(Trainer):
@@ -63,11 +63,9 @@ def train(cfg: DictConfig) -> None:
         cfg.trainer, report_to="wandb" if cfg.log_wandb else None
     )
 
-    train_dataset = HFSummary(split=cfg.dataset.train)
-    validation_dataset = HFSummary(split=cfg.dataset.validation)
+    train_dataset, validation_dataset = prepare_datasets(config=cfg)
     collator_fn = RMDataCollator(tokenizer=tokenizer,
                                  max_length=cfg.max_length)
-    
     # Initialize our Trainer
     trainer = RMTrainer(
         model=model,
