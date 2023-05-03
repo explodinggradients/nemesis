@@ -22,6 +22,7 @@ class RMTrainer(Trainer):
     def compute_loss(self, model, inputs, return_outputs=False):
 
         k_lens = inputs.pop("k_lens")
+        inputs = self._prepare_inputs(inputs)
         logits = model(**inputs).logits
         loss = self.loss(logits, k_lens)
         return (loss,logits) if return_outputs else loss
