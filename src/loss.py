@@ -25,13 +25,13 @@ class RMLoss(nn.Module):
             positive = logits[combinations[:,0]]
             negative = logits[combinations[:,1]]
             l2 = 0.5 * (positive**2 - negative**2)
-            loss = -1 * (nn.functional.logsigmoid(positive - negative) + self.beta * l2).mean()
+            loss =  (-1 * nn.functional.logsigmoid(positive - negative) + self.beta * l2).mean()
             total_loss.append(loss)
 
         total_loss = torch.stack(total_loss)
         if self.reduction == "mean":
             total_loss = total_loss.mean()
-
+        print(total_loss.item())
         return total_loss
 
 
