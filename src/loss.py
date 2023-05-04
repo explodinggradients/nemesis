@@ -24,7 +24,7 @@ class RMLoss(nn.Module):
             combinations = torch.combinations(torch.arange(start, end, device=logits.device), 2)
             positive = logits[combinations[:,0]]
             negative = logits[combinations[:,1]]
-            l2 = 0.5 * (positive**2 - negative**2)
+            l2 = 0.5 * (positive**2 + negative**2)
             loss =  (-1 * nn.functional.logsigmoid(positive - negative) + self.beta * l2).mean()
             total_loss.append(loss)
 
