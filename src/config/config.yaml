@@ -1,6 +1,6 @@
 defaults:
   - trainer: default
-model: "EleutherAI/pythia-160m"
+model: "Dahoas/pythia-125M-static-sft"
 log_dir: "safetyfiles"
 log_wandb: true
 run_name: neox-160m-3epochs
