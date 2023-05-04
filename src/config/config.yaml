@@ -16,4 +16,4 @@ datasets:
         split: ["validation","test"]
   - webgpt:
         split: "train"
-validation_size: 0.15
+validation_size: 0.1
