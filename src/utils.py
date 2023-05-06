@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer
 from torch.utils.data import ConcatDataset, random_split
-from dataset import HFSummary, WebGPT
+from dataset import AnthropicRLFH, HFSummary, WebGPT
 
 SPECIAL_TOKENS = {"prompter": "|prompter|", "assistant": "|assistant|"}
 
@@ -31,6 +31,8 @@ def get_single_dataset(name, **kwargs):
         dataset = HFSummary(**kwargs)
     elif name == "webgpt":
         dataset = WebGPT(**kwargs)
+    elif name == "AnthropicRLHF":
+        dataset = AnthropicRLFH(**kwargs)
     else:
         raise ValueError(f"Invalid dataset name {name}")
 
