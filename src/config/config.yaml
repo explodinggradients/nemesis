@@ -3,7 +3,7 @@ defaults:
 model: "Dahoas/pythia-125M-static-sft"
 log_dir: "safetyfiles"
 log_wandb: true
-run_name: neox-160m-3epochs
+run_name: "GPTNeoX-125M-alldataset"
 wandb_entity: "shahules786"
 max_length: 512
 per_digit_tokens: False
@@ -14,7 +14,7 @@ special_tokens:
 datasets:
   - hf_summary:
         split: ["validation","test"]
-        
+
   - webgpt:
         split: "train"
 
