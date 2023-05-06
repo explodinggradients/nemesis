@@ -13,7 +13,10 @@ class HFSummary(Dataset):
         super().__init__()
         if isinstance(split, str):
             split = [split]
-        self.split = OmegaConf.to_object(split)
+        if isinstance(split, OmegaConf):
+            self.split = OmegaConf.to_object(split)
+        else:
+            self.split = split      
         dataset = load_dataset(self.name, "axis", split=self.split)
         self.data_dict = self.prepare_axis(dataset)
         self.postids = list(self.data_dict.keys())
@@ -46,7 +49,7 @@ class HFSummary(Dataset):
         dedup_dict = {item["axes"]["overall"]: item["text"] for item in summaries}
         summaries = {key: val for val, key in dedup_dict.items()}
         summaries = list(summaries.keys())
-        return post, summaries
+        return [post], summaries
 
 
 class WebGPT:
@@ -87,4 +90,36 @@ class WebGPT:
 
     def __getitem__(self, idx):
         question, answers = self.dataset_dict[self.post_ids[idx]].values()
-        return question, answers
+        return [question], answers
+
+
+class AnthropicRLFH(Dataset):
+    name = "Dahoas/full-hh-rlhf"
+
+    def __init__(self,split:Union[List[str],str]="train"):
+        super().__init__()
+        if isinstance(split, str):
+            split = [split]
+        if isinstance(split, OmegaConf):
+            self.split = OmegaConf.to_object(split)
+        else:
+            self.split = split
+        dataset = load_dataset(self.name,split=self.split)
+        self.data_dict = defaultdict(dict)
+        id = 0
+        for data in dataset:
+            for item in data:
+                dialogs = [text.replace("\n\n","").strip() for text in re.split(r'Human:|Assistant:',item["prompt"])]
+                dialogs = [text for text in dialogs if text!=""]
+                self.data_dict[f"prompt{id}"].update({"prompt":dialogs,
+                                           "answers":[item["chosen"], item["rejected"]]})
+                id+=1   
+
+        self.prompt_ids = list(self.data_dict.keys())
+
+    def __len__(self,):
+        return len(self.prompt_ids)
+    
+    def __getitem__(self, idx):
+        prompt, answers = self.data_dict.get(self.prompt_ids[idx],{}).values()
+        return prompt, answers
