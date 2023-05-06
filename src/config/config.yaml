@@ -12,6 +12,10 @@ special_tokens:
   sep_token: "<sep>"
   pad_token: "<pad>"
 datasets:
+  - hf_summary:
+        split: ["validation","test"]
+
   - webgpt:
         split: "train"
-validation_size: 0.1
+
+validation_size: 0.15

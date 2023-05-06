@@ -14,30 +14,29 @@ from utils import get_tokenizer, prepare_datasets
 
 
 class RMTrainer(Trainer):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.loss = RMLoss(reduction="mean")
 
     def compute_loss(self, model, inputs, return_outputs=False):
-
         k_lens = inputs.pop("k_lens")
         inputs = self._prepare_inputs(inputs)
         logits = model(**inputs).logits
         loss = self.loss(logits, k_lens)
-        return (loss,logits) if return_outputs else loss
-    
-    def prediction_step(self,
+        return (loss, logits) if return_outputs else loss
+
+    def prediction_step(
+        self,
         model: nn.Module,
         inputs: Dict[str, Union[torch.Tensor, Any]],
         prediction_loss_only: bool,
-        ignore_keys: Optional[List[str]] = None):
-
+        ignore_keys: Optional[List[str]] = None,
+    ):
         with torch.no_grad():
-            loss,logits = self.compute_loss(model, inputs, return_outputs=True)
-        
-        return (loss,logits,None)
-    
+            loss, logits = self.compute_loss(model, inputs, return_outputs=True)
+
+        return (loss, logits, None)
+
 
 @hydra.main(version_base=None, config_path="config", config_name="config")
 def train(cfg: DictConfig) -> None:
@@ -65,8 +64,7 @@ def train(cfg: DictConfig) -> None:
     )
 
     train_dataset, validation_dataset = prepare_datasets(config=cfg)
-    collator_fn = RMDataCollator(tokenizer=tokenizer,
-                                 max_length=cfg.max_length)
+    collator_fn = RMDataCollator(tokenizer=tokenizer, max_length=cfg.max_length)
     # Initialize our Trainer
     trainer = RMTrainer(
         model=model,
@@ -84,9 +82,4 @@ def train(cfg: DictConfig) -> None:
 
 
 if __name__ == "__main__":
-    
     train()
-
-
-
-

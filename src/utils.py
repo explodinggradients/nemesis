@@ -2,10 +2,7 @@ from transformers import AutoTokenizer
 from torch.utils.data import ConcatDataset, random_split
 from dataset import HFSummary, WebGPT
 
-SPECIAL_TOKENS = {
-    "prompter":"|prompter|",
-    "assistant":"|assistant|"
-}
+SPECIAL_TOKENS = {"prompter": "|prompter|", "assistant": "|assistant|"}
 
 
 def get_tokenizer(config):
@@ -29,18 +26,18 @@ def get_tokenizer(config):
     return tokenizer
 
 
-def get_single_dataset(name,**kwargs):
+def get_single_dataset(name, **kwargs):
     if name == "hf_summary":
         dataset = HFSummary(**kwargs)
     elif name == "webgpt":
         dataset = WebGPT(**kwargs)
     else:
         raise ValueError(f"Invalid dataset name {name}")
-    
+
     return dataset
 
+
 def prepare_datasets(config):
-    
     dataset_list = []
     for dataset in config.datasets:
         name = list(dataset.keys())[0]
@@ -48,7 +45,7 @@ def prepare_datasets(config):
         dataset_list.append(get_single_dataset(name, **kwargs))
 
     dataset = ConcatDataset(dataset_list)
-    train_dataset, valid_dataset = random_split(dataset, [1-config.validation_size, config.validation_size])
+    train_dataset, valid_dataset = random_split(
+        dataset, [1 - config.validation_size, config.validation_size]
+    )
     return train_dataset, valid_dataset
-
- 
