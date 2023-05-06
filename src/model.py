@@ -1,10 +1,10 @@
-from turtle import forward
 from dataclasses import dataclass
 from transformers import (
     GPTNeoXConfig,
     GPTNeoXPreTrainedModel,
-    GPTNeoXForCausalLM,
     GPTNeoXModel,
+    AutoModelForSequenceClassification,
+    AutoConfig,
 )
 from torch import nn
 import torch
@@ -19,9 +19,21 @@ class GPTNeoxRMOuptput(ModelOutput):
 
     logits: torch.FloatTensor = None
 
+class GPTNeoXConfigRM(GPTNeoXConfig):
+    model_type = "rm_gptneox_config"
+
+    def __init__(
+        self,
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+
 
 class GPTNeoXRM(GPTNeoXPreTrainedModel):
-    """ """
+    config_class = GPTNeoXConfigRM
+    """ 
+    Reward Model
+    """
 
     def __init__(
         self,
@@ -61,3 +73,7 @@ class GPTNeoXRM(GPTNeoXPreTrainedModel):
             return (lm_logits,) + outputs[1:]
 
         return GPTNeoxRMOuptput(logits=lm_logits)
+
+
+AutoConfig.register("rm_gptneox_config", GPTNeoXConfigRM)
+AutoModelForSequenceClassification.register(GPTNeoXConfigRM, GPTNeoXRM)
