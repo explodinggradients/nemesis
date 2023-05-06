@@ -24,7 +24,6 @@ class RMDataCollator:
         prefix, outputs = example
         prefix = self.format_prefix(prefix, eos)
         outputs = [self.format_suffix(output, eos) for output in outputs]
-        print(prefix,outputs)
         prefix_tokens = self.tokenizer.encode(prefix)
         input_ids, attention_masks = [], []
         for output in outputs:

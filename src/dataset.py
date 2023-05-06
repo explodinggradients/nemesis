@@ -3,8 +3,8 @@ from torch.utils.data import Dataset
 from datasets import load_dataset
 import re
 from typing import Union, List
+import omegaconf
 from omegaconf import OmegaConf
-
 
 class HFSummary(Dataset):
     name = "openai/summarize_from_feedback"
@@ -13,7 +13,7 @@ class HFSummary(Dataset):
         super().__init__()
         if isinstance(split, str):
             split = [split]
-        if isinstance(split, OmegaConf):
+        if isinstance(split, omegaconf.listconfig.ListConfig):
             self.split = OmegaConf.to_object(split)
         else:
             self.split = split      
@@ -100,7 +100,7 @@ class AnthropicRLFH(Dataset):
         super().__init__()
         if isinstance(split, str):
             split = [split]
-        if isinstance(split, OmegaConf):
+        if isinstance(split, omegaconf.listconfig.ListConfig):
             self.split = OmegaConf.to_object(split)
         else:
             self.split = split
