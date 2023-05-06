@@ -36,5 +36,4 @@ class RMLoss(nn.Module):
         total_loss = torch.stack(total_loss)
         if self.reduction == "mean":
             total_loss = total_loss.mean()
-        print(total_loss.item())
         return total_loss
