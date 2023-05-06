@@ -10,17 +10,21 @@ class RMDataCollator:
     tokenizer: PreTrainedTokenizer
     max_length: int = 512
 
-    def format_example(self, example, eos, prompt=False):
-        sp_token = SPECIAL_TOKENS["prompter"] if prompt else SPECIAL_TOKENS["assistant"]
-        return "{}{}{}".format(sp_token, example, eos)
+    def format_prefix(self, prompts, eos):
+
+        prompts = ["{}{}{}".format(SPECIAL_TOKENS["prompter"] if i%2==0 else SPECIAL_TOKENS["assistant"], prompt, eos) for i,prompt in enumerate(prompts)]
+        return "".join(prompts)
+    
+    def format_suffix(self, answer, eos):
+        return "{}{}{}".format(SPECIAL_TOKENS["assistant"], answer, eos)
 
     def process_example(self, example):
         trunc_len = 0
         eos = self.tokenizer.eos_token
         prefix, outputs = example
-        prefix = self.format_example(example, eos, prompt=True)
-        outputs = [self.format_example(output, eos) for output in outputs]
-
+        prefix = self.format_prefix(prefix, eos)
+        outputs = [self.format_suffix(output, eos) for output in outputs]
+        print(prefix,outputs)
         prefix_tokens = self.tokenizer.encode(prefix)
         input_ids, attention_masks = [], []
         for output in outputs:
