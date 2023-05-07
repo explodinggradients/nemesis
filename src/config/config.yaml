@@ -3,7 +3,7 @@ defaults:
 model: "unionai/pythia-410m-finetune-alpaca"
 log_dir: "safetyfiles"
 log_wandb: true
-run_name: "GPTNeoX-125M-alldataset"
+run_name: "webgpt_hhrlhf"
 wandb_entity: "shahules786"
 max_length: 512
 per_digit_tokens: False
