@@ -1,9 +1,9 @@
 defaults:
   - trainer: default
 model: "SummerSigh/Pythia410m-Instruct-SFT"
-log_dir: "safetyfiles"
+log_dir: "reward-model"
 log_wandb: true
-run_name: "webgpt_hhrlhf"
+run_name: "hhrlhf"
 wandb_entity: "shahules786"
 max_length: 512
 per_digit_tokens: False
@@ -12,10 +12,8 @@ special_tokens:
   sep_token: "<sep>"
   pad_token: "<pad>"
 datasets:
-  - webgpt:
-        split: "train"
 
   - AnthropicRLHF:
-        split: "train"
+        split: ["train","test"]
 
 validation_size: 0.1
