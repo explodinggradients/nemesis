@@ -11,7 +11,7 @@ import os
 from loss import RMLoss
 from model import GPTNeoXRM
 from utils import get_tokenizer, prepare_datasets
-
+os.environ["HYDRA_FULL_ERROR"] = "1"
 
 class RMTrainer(Trainer):
     def __init__(self, **kwargs):
