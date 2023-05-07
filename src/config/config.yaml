@@ -1,6 +1,6 @@
 defaults:
   - trainer: default
-model: "unionai/pythia-410m-finetune-alpaca"
+model: "EleutherAI/pythia-410m"
 log_dir: "safetyfiles"
 log_wandb: true
 run_name: "webgpt_hhrlhf"
