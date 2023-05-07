@@ -1,6 +1,6 @@
 defaults:
   - trainer: default
-model: "EleutherAI/pythia-410m"
+model: "SummerSigh/Pythia410m-Instruct-SFT"
 log_dir: "safetyfiles"
 log_wandb: true
 run_name: "webgpt_hhrlhf"
