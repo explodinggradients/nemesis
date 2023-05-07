@@ -1,6 +1,6 @@
 defaults:
   - trainer: default
-model: "Dahoas/pythia-125M-static-sft"
+model: "unionai/pythia-410m-finetune-alpaca"
 log_dir: "safetyfiles"
 log_wandb: true
 run_name: "GPTNeoX-125M-alldataset"
@@ -12,13 +12,10 @@ special_tokens:
   sep_token: "<sep>"
   pad_token: "<pad>"
 datasets:
-  - hf_summary:
-        split: ["validation","test"]
-
   - webgpt:
         split: "train"
 
   - AnthropicRLHF:
         split: "train"
 
-validation_size: 0.15
+validation_size: 0.1
