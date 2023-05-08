@@ -1,5 +1,5 @@
 # Reward-Model
-Framework for reward model for RLHF. 
+Framework for reward model for RLHF.
 
 
 ### Quick Start
@@ -17,4 +17,3 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL)
 ```bash
 python src/training.py --config-name <your-config-name>
 ```
-
