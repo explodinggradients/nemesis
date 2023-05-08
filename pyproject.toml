@@ -1,9 +1,9 @@
 [project]
-name = "blade2blade"
-description = "Adversarial Training and SFT for Bot Safety Models"
+name = "Reward-Model"
+description = "Reward Model training for LLM alignment"
 version = "0.0.1"
 authors = [
-    { name = "LAION-AI", email = "contact@laion.ai" }
+    { name = "Exploding gradients", email = "shahules786@gmail.com" }
 ]
 readme = "README.md"
 dependencies = [
@@ -12,11 +12,8 @@ dependencies = [
     "transformers>=4.27.4",
     "hydra-core>=1.3.2",
     "tokenizers>=0.13.2",
-]
-
-[project.optional-dependencies]
-dev = [
     "wandb>=0.14.0",
+
 ]
 
 [build-system]
