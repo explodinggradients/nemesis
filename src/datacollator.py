@@ -12,7 +12,6 @@ class RMDataCollator:
     max_length: int = 512
 
     def format_prefix(self, prompts, eos):
-
         prompts = [
             "{}{}{}".format(
                 SPECIAL_TOKENS["prompter"]
