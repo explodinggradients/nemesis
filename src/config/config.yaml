@@ -3,7 +3,7 @@ defaults:
 model: "SummerSigh/Pythia410m-Instruct-SFT"
 log_dir: "reward-model"
 log_wandb: true
-run_name: "hhrlhf"
+run_name: "hhrlhf_last"
 wandb_entity: "shahules786"
 max_length: 512
 per_digit_tokens: False
