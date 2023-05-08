@@ -4,7 +4,7 @@ Reward Model training framework for LLM RLHF. For in-depth understanding of Rewa
 * Inference
 ```python
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
-MODEL = ""
+MODEL = "shahules786/Reward-model-gptneox-410M"
 
 model = AutoModelForSequenceClassification.from_pretrained(MODEL)
 tokenizer = AutoTokenizer.from_pretrained(MODEL)
