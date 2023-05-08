@@ -40,7 +40,7 @@ jobs:
         pip install black
     - name: Install reward-model
       run: |
-          pip install -e .[dev]
+          pip install -e .
     - name: Run black
-      # run:
-      #   black --check .  --exclude blade2blade/__init__.py
+      run:
+        black --check . 
