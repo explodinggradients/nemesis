@@ -38,9 +38,9 @@ jobs:
         sudo apt-get install libsndfile1
         pip install -r requirements.txt
         pip install black
-    - name: Install reward-model
-      run: |
-          pip install -e .
+    # - name: Install reward-model
+    #   run: |
+    #       pip install -e .
     - name: Run black
       run:
         black --check .
