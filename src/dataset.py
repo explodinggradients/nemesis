@@ -1,9 +1,10 @@
-from collections import defaultdict
-from torch.utils.data import Dataset
-from datasets import load_dataset
 import re
-from typing import Union, List
+from collections import defaultdict
+from typing import List, Union
+
+from datasets import load_dataset
 from omegaconf import OmegaConf
+from torch.utils.data import Dataset
 
 
 class HFSummary(Dataset):
@@ -16,7 +17,7 @@ class HFSummary(Dataset):
         if isinstance(split, OmegaConf):
             self.split = OmegaConf.to_object(split)
         else:
-            self.split = split      
+            self.split = split
         dataset = load_dataset(self.name, "axis", split=self.split)
         self.data_dict = self.prepare_axis(dataset)
         self.postids = list(self.data_dict.keys())
@@ -96,7 +97,7 @@ class WebGPT:
 class AnthropicRLFH(Dataset):
     name = "Dahoas/full-hh-rlhf"
 
-    def __init__(self,split:Union[List[str],str]="train"):
+    def __init__(self, split: Union[List[str], str] = "train"):
         super().__init__()
         if isinstance(split, str):
             split = [split]
@@ -104,22 +105,28 @@ class AnthropicRLFH(Dataset):
             self.split = OmegaConf.to_object(split)
         else:
             self.split = split
-        dataset = load_dataset(self.name,split=self.split)
+        dataset = load_dataset(self.name, split=self.split)
         self.data_dict = defaultdict(dict)
         id = 0
         for data in dataset:
             for item in data:
-                dialogs = [text.replace("\n\n","").strip() for text in re.split(r'Human:|Assistant:',item["prompt"])]
-                dialogs = [text for text in dialogs if text!=""]
-                self.data_dict[f"prompt{id}"].update({"prompt":dialogs,
-                                           "answers":[item["chosen"], item["rejected"]]})
-                id+=1   
+                dialogs = [
+                    text.replace("\n\n", "").strip()
+                    for text in re.split(r"Human:|Assistant:", item["prompt"])
+                ]
+                dialogs = [text for text in dialogs if text != ""]
+                self.data_dict[f"prompt{id}"].update(
+                    {"prompt": dialogs, "answers": [item["chosen"], item["rejected"]]}
+                )
+                id += 1
 
         self.prompt_ids = list(self.data_dict.keys())
 
-    def __len__(self,):
+    def __len__(
+        self,
+    ):
         return len(self.prompt_ids)
-    
+
     def __getitem__(self, idx):
-        prompt, answers = self.data_dict.get(self.prompt_ids[idx],{}).values()
+        prompt, answers = self.data_dict.get(self.prompt_ids[idx], {}).values()
         return prompt, answers
