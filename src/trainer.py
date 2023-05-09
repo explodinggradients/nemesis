@@ -61,7 +61,7 @@ def train(cfg: DictConfig) -> None:
 
     model = GPTNeoXRM.from_pretrained(cfg.model)
     tokenizer = get_tokenizer(cfg)
-
+    print("IF", os.path.exists(cfg.deepspeed_config))
     training_args = instantiate(
         cfg.trainer,
         deepspeed=cfg.deepspeed_config if cfg.deepspeed else None,
