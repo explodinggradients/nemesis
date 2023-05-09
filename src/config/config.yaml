@@ -1,6 +1,6 @@
 defaults:
   - trainer: default
-model: "SummerSigh/Pythia410m-Instruct-SFT"
+model: "togethercomputer/RedPajama-INCITE-Base-3B-v1"
 log_dir: "reward-model"
 log_wandb: true
 run_name: "hhrlhf_last"
