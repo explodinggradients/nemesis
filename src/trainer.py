@@ -63,7 +63,9 @@ def train(cfg: DictConfig) -> None:
     tokenizer = get_tokenizer(cfg)
 
     training_args = instantiate(
-        cfg.trainer, report_to="wandb" if cfg.log_wandb else None
+        cfg.trainer,
+        deepspeed=cfg.deepspeed_config if cfg.deepspeed else None,
+        report_to="wandb" if cfg.log_wandb else None,
     )
 
     train_dataset, validation_dataset = prepare_datasets(config=cfg)
