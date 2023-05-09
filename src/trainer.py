@@ -1,17 +1,20 @@
-from typing import Any, Dict, List, Optional, Tuple, Union
-import torch
-from torch import nn
-from transformers import Trainer
+import os
+from typing import Any, Dict, List, Optional, Union
+
 import hydra
+import torch
 from hydra.utils import instantiate
 from omegaconf import DictConfig
-from datacollator import RMDataCollator
-import os
+from torch import nn
+from transformers import Trainer
 
+from datacollator import RMDataCollator
 from loss import RMLoss
 from model import GPTNeoXRM
 from utils import get_tokenizer, prepare_datasets
+
 os.environ["HYDRA_FULL_ERROR"] = "1"
+
 
 class RMTrainer(Trainer):
     def __init__(self, **kwargs):

@@ -1,6 +1,7 @@
-from transformers import PreTrainedTokenizer
-import torch
 from dataclasses import dataclass
+
+import torch
+from transformers import PreTrainedTokenizer
 
 from utils import SPECIAL_TOKENS
 
@@ -11,10 +12,18 @@ class RMDataCollator:
     max_length: int = 512
 
     def format_prefix(self, prompts, eos):
-
-        prompts = ["{}{}{}".format(SPECIAL_TOKENS["prompter"] if i%2==0 else SPECIAL_TOKENS["assistant"], prompt, eos) for i,prompt in enumerate(prompts)]
+        prompts = [
+            "{}{}{}".format(
+                SPECIAL_TOKENS["prompter"]
+                if i % 2 == 0
+                else SPECIAL_TOKENS["assistant"],
+                prompt,
+                eos,
+            )
+            for i, prompt in enumerate(prompts)
+        ]
         return "".join(prompts)
-    
+
     def format_suffix(self, answer, eos):
         return "{}{}{}".format(SPECIAL_TOKENS["assistant"], answer, eos)
 
@@ -24,6 +33,7 @@ class RMDataCollator:
         prefix, outputs = example
         prefix = self.format_prefix(prefix, eos)
         outputs = [self.format_suffix(output, eos) for output in outputs]
+        print(prefix, outputs)
         prefix_tokens = self.tokenizer.encode(prefix)
         input_ids, attention_masks = [], []
         for output in outputs:

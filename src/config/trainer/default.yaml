@@ -19,3 +19,4 @@ fp16: true
 lr_scheduler_type: cosine
 warmup_ratio: 0.15
 evaluation_strategy: steps
+deepspeed_config: configs/trainer/zero.json

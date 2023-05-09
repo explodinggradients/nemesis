@@ -1,10 +1,13 @@
-from transformers import AutoTokenizer
-from torch.utils.data import ConcatDataset, random_split
-from dataset import AnthropicRLFH, HFSummary, WebGPT
 import torch
+from tokenizers import pre_tokenizers
+from torch.utils.data import ConcatDataset, random_split
+from transformers import AutoTokenizer
+
+from dataset import AnthropicRLFH, HFSummary, WebGPT
 
 SPECIAL_TOKENS = {"prompter": "|prompter|", "assistant": "|assistant|"}
 generator = torch.Generator().manual_seed(42)
+
 
 def get_tokenizer(config):
     tokenizer = AutoTokenizer.from_pretrained(config.model)
@@ -49,6 +52,8 @@ def prepare_datasets(config):
 
     dataset = ConcatDataset(dataset_list)
     train_dataset, valid_dataset = random_split(
-        dataset, [1 - config.validation_size, config.validation_size], generator
+        dataset,
+        [1 - config.validation_size, config.validation_size],
+        generator=generator,
     )
     return train_dataset, valid_dataset
