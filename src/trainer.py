@@ -5,7 +5,6 @@ import hydra
 import torch
 from hydra.utils import instantiate
 from omegaconf import DictConfig
-from torch import nn
 from transformers import Trainer
 
 from datacollator import RMDataCollator
@@ -30,7 +29,7 @@ class RMTrainer(Trainer):
 
     def prediction_step(
         self,
-        model: nn.Module,
+        model,
         inputs: Dict[str, Union[torch.Tensor, Any]],
         prediction_loss_only: bool,
         ignore_keys: Optional[List[str]] = None,
