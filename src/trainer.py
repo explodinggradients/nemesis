@@ -42,6 +42,7 @@ class RMTrainer(Trainer):
 
 @hydra.main(version_base=None, config_path="config", config_name="config")
 def train(cfg: DictConfig) -> None:
+    print("DEVICE COUNT", torch.cuda.device_count())
     if not os.path.exists(cfg.log_dir):
         os.mkdir(cfg.log_dir)
 
