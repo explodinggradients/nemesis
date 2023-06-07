@@ -1,6 +1,6 @@
 defaults:
   - trainer: default
-model: togethercomputer/RedPajama-INCITE-Base-3B-v1
+model: togethercomputer/RedPajama-INCITE-7B-Base
 log_dir: "reward-model"
 log_wandb: true
 run_name: "hhrlhf_last"
