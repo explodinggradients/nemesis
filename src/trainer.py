@@ -13,6 +13,8 @@ from model import GPTNeoXRM
 from utils import get_tokenizer, prepare_datasets
 
 os.environ["HYDRA_FULL_ERROR"] = "1"
+os.environ["CUDA_LAUNCH_BLOCKING"] = "1"
+os.environ["TORCH_USE_CUDA_DSA"] = "1"
 
 
 class RMTrainer(Trainer):
